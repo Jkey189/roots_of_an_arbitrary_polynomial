@@ -30,7 +30,7 @@ ld countingValue(const ld root, const std::vector<ld>& pol) {
   ld value = 0.0;
   ld k = 1;
 
-  for (size_t i = pol.size() - 1; i > -1; --i) {
+  for (int i = static_cast<int>(pol.size()) - 1; i > -1; --i) {
     value += pol[i] * k;
     k *= root;
   }
