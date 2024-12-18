@@ -1,0 +1,3 @@
+C:/Projects/roots_of_an_arbitrary_polynomial/cmake-build-debug/CMakeFiles/roots_of_an_arbitrary_polynomial.dir
+C:/Projects/roots_of_an_arbitrary_polynomial/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Projects/roots_of_an_arbitrary_polynomial/cmake-build-debug/CMakeFiles/rebuild_cache.dir
