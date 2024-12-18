@@ -8,7 +8,7 @@
 
 typedef long double ld;
 
-constexpr ld epsilon = 0.000001;
+constexpr ld epsilon = 0.00000001;
 
 
 ld countingValue(ld root, const std::vector<ld>& pol);
@@ -114,7 +114,7 @@ int main() {
   std::cin >> a >> b;
 
   for (std::vector roots = findRoots(coefficients, a, b, maxPower); const auto root : roots) {
-    std::cout /* << std::fixed << std::setprecision(6)*/ << root << ' ';
+    std::cout << std::fixed << std::setprecision(8) << root << ' ';
   }
   std::cout << std::endl;
 
