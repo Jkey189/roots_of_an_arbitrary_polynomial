@@ -1,36 +1,24 @@
+#pragma optimize( "s", on )
+
+
 #include <iomanip>
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <cmath>
-#include <semaphore>
 
 
 typedef long double ld;
 
 constexpr ld epsilon = 0.00000001;
+constexpr ld checkEpsilon = 0.00001;
 
-
-ld countingValue(ld root, const std::vector<ld>& pol);
-
-
-ld binarySearch(ld l, ld r, const std::vector<ld>& pol) {
-  while (r - l > epsilon) {
-    if (const ld mid = l + (r - l) / 2.0; countingValue(l, pol) * countingValue(mid, pol) > 0) {
-      l = mid;
-    } else {
-      r = mid;
-    }
-  }
-
-  return (l + r) / 2.0;
-}
 
 ld countingValue(const ld root, const std::vector<ld>& pol) {
-  ld value = 0.0;
+  ld value = 0.0L;
   ld k = 1;
 
-  for (int i = static_cast<int>(pol.size()) - 1; i > -1; --i) {
+  for (int i = pol.size() - 1; i >= 0; --i) {
     value += pol[i] * k;
     k *= root;
   }
@@ -38,31 +26,39 @@ ld countingValue(const ld root, const std::vector<ld>& pol) {
   return value;
 }
 
-std::vector<ld> givePolynomial(const std::vector<ld>& pol) {
-  std::vector<ld> polynomial;
-  const ld length = pol.size();
+ld binarySearch(ld l, ld r, const std::vector<ld>& pol) {
+  while (r - l > epsilon) {
+    if (const ld mid = l + (r - l) / 2.0L; countingValue(l, pol) * countingValue(mid, pol) > 0) {
+      l = mid;
+    } else {
+      r = mid;
+    }
+  }
 
-  for (size_t i = 0; i < length - 1; ++i) {
-    polynomial.push_back(pol[i] * (length - i - 1));
+  return (l + r) / 2.0L;
+}
+
+std::vector<ld> givePolynomial(const std::vector<ld>& pol) {
+  if (pol.size() <= 1) {
+    return {};
+  }
+
+  std::vector<ld> polynomial(pol.size() - 1);
+  for (size_t i = 0; i < pol.size() - 1; ++i) {
+    polynomial[i] = pol[i] * (pol.size() - i - 1);
   }
 
   return polynomial;
 }
 
-std::vector<ld> findRoots(const std::vector<ld>& coefficients, ld a, ld b, const size_t maxPower) {
-  const ld tmpA = a, tmpB = b;
-  a = (a > b) ? b : a;
-  b = (a == tmpB && tmpA != tmpB) ? tmpA : tmpB;
-
+std::vector<ld> findRoots(const std::vector<ld>& coefficients, const ld a, const ld b, const int maxPower) {
   // if maxPower (in start) == 2
   if (coefficients.size() == 2) {
-    if (const ld root = -coefficients[1] / coefficients[0]; a <= root && root < b) {
-      std::vector<ld> roots;
-      const ld currRoot = (coefficients[1] == 0) ? 0.0 : root;
-      roots.push_back(currRoot);
-      return roots;
-    }
+    return (a - epsilon <= -coefficients[1] / coefficients[0] && -coefficients[1] / coefficients[0] < b + epsilon)
+    ? std::vector{-coefficients[1] / coefficients[0]}
+    : std::vector<ld>{};
   }
+
 
   std::vector extreme = findRoots(givePolynomial(coefficients), a, b, maxPower - 1);
   std::vector<ld> roots, points;
@@ -76,32 +72,43 @@ std::vector<ld> findRoots(const std::vector<ld>& coefficients, ld a, ld b, const
 
 
   // find roots
-  for (size_t i = 0; i < points.size() - 1; ++i) {
-    if (std::fabs(countingValue(points[i], coefficients)) < epsilon) {
+  for (int i = 0; i < points.size() - 1; ++i) {
+    if (fabs(countingValue(points[i], coefficients)) < epsilon) {
       roots.push_back(points[i]);
 
-      if (i != 0 && points[i - 1] != points[i]) {
+      if (i != 0 && points[i - 1] != points[i]/*std::fabs(points[i - 1] - points[i]) > epsilon*/) {
         roots.push_back(points[i]);
       }
     }
   }
 
-  for (size_t i = 1; i < points.size(); ++i) {
+  for (int i = 1; i < points.size(); ++i) {
     if (countingValue(points[i - 1], coefficients) * countingValue(points[i], coefficients) < 0) {
       if (const ld currRoot = binarySearch(points[i - 1], points[i], coefficients);
-        fabs(points[i - 1] - currRoot) > sqrt(epsilon) && fabs(points[i] - currRoot) > sqrt(epsilon)) {
+        fabs(points[i - 1] - currRoot) > checkEpsilon && fabs(points[i] - currRoot) > checkEpsilon) {
         roots.push_back(currRoot);
       }
     }
   }
 
-  std::ranges::sort(roots);
+  qsort(roots.data(), roots.size(), sizeof(decltype(roots)::value_type),
+    [](const void* x, const void* y) {
+      const ld arg1 = *static_cast<const ld*>(x);
+      const ld arg2 = *static_cast<const ld*>(y);
+      const auto cmp = arg1 <=> arg2;
+      return (cmp < nullptr) ? -1 : 1;
+    });
+  /*std::ranges::sort(roots);*/
 
   return roots;
 }
 
 
 int main() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+
   int maxPower;
   std::cin >> maxPower;
 
@@ -113,7 +120,8 @@ int main() {
   ld a, b;
   std::cin >> a >> b;
 
-  for (std::vector roots = findRoots(coefficients, a, b, maxPower); const auto root : roots) {
+  std::vector<ld> roots = findRoots(coefficients, a, b, maxPower);
+  for (const auto root : roots) {
     std::cout << std::fixed << std::setprecision(8) << root << ' ';
   }
   std::cout << std::endl;
