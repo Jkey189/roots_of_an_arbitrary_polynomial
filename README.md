@@ -11,7 +11,7 @@ This repository contains a solution to a challenging mathematical problem.
 $p(x) = a_nx^n + a_{n - 1}x^{n - 1} + \ldots + a_1x + a_0, a_i \in R, 0 \leqslant i \geqslant n, a_n \ne 0$
 
 Найти все его корни на заданном полуинтервале
-$\[ A, B \)$, где $A, B \in R$, $A < B$
+$[ A, B )$, где $A, B \in R$, $A < B$
 
 Помогите Герману перестать отчаиваться и идеально решить свое домашнее задание
 
@@ -22,7 +22,7 @@ $\[ A, B \)$, где $A, B \in R$, $A < B$
 
 ## Формат Вывода
 
-Выведите все корни многочлена $p$ на полуинтервале $\[ A, B \)$ в порядке $\textbf{неубывания}$ (нужно учитывать кратность корней) через пробел с точностью не менее $10^{−6}$. Если многочлен не имеет корней, ничего выводить не нужно
+Выведите все корни многочлена $p$ на полуинтервале $[ A, B )$ в порядке $\textbf{неубывания}$ (нужно учитывать кратность корней) через пробел с точностью не менее $10^{−6}$. Если многочлен не имеет корней, ничего выводить не нужно
 
 ***
 
@@ -37,7 +37,7 @@ For the variable $x \in R$ on the real line, a polynomial with real coefficients
 $p(x) = a_nx^n + a_{n - 1}x^{n - 1} + \ldots + a_1x + a_0, a_i \in R, 0 \leqslant i \geqslant n, a_n \ne 0$
 
 Find all its roots on the given half-interval
-$\[ A, B \)$, where $A, B \in R$, $A < B$
+$[ A, B )$, where $A, B \in R$, $A < B$
 
 Help Herman stop despairing and solve his homework perfectly
 
@@ -48,7 +48,7 @@ The first line of the program is fed with the number $n$ — the degree of the p
 
 ## Output Format
 
-Output all roots of the polynomial $p$ on the half-interval $\[ A, B \)$ in $\textbf{non-decreasing}$ order (you need to take into account the multiplicity of the roots) separated by a space with an accuracy of at least $10^{−6}$. If the polynomial has no roots, you do not need to output anything
+Output all roots of the polynomial $p$ on the half-interval $[ A, B )$ in $\textbf{non-decreasing}$ order (you need to take into account the multiplicity of the roots) separated by a space with an accuracy of at least $10^{−6}$. If the polynomial has no roots, you do not need to output anything
 
 
 
